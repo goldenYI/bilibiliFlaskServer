@@ -88,3 +88,28 @@ ROBOTSTXT_OBEY = True
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+
+# Scrapy-Splash config
+
+# Splash server address
+SPLASH_URL = 'http://192.168.99.100:8050'
+
+# Enable the Splash middleware
+DOWNLOADER_MIDDLEWARES = {
+    'scrapy_splash.SplashCookiesMiddleware': 723,
+    'scrapy_splash.SplashMiddleware': 725,
+    'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810,
+}
+
+# Enable SplashDeduplicateArgsMiddleware
+SPIDER_MIDDLEWARES = {
+    'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
+}
+
+# Set a custom DUPEFILTER_CLASS
+DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
+
+# If you use Scrapy HTTP cache then a custom cache storage backend is required
+# scrapy-splash provides a subclass of scrapy.contrib.httpcache.FilesystemCacheStorage
+HTTPCACHE_STORAGE = 'scrapy_splash.SplashAwareFSCacheStorage'

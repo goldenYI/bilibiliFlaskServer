@@ -11,4 +11,6 @@ import scrapy
 class SpiderItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
-    pass
+    video_av_field = scrapy.Field()
+
+
