@@ -2,8 +2,11 @@
 
 import scrapy
 from scrapy_splash import SplashRequest
+from spider.items import HomeItem
+
 
 class home_music_spider(scrapy.Spider):
+
     name = "home_music_spider"
     allowed_domains = "http://www.bilibili.com/"
     start_urls = [
@@ -11,38 +14,49 @@ class home_music_spider(scrapy.Spider):
     ]
     script = """
         function main(splash)
-            splash:go(splash.args.url)
-            splash:runjs("window.scrollTo(0,99999)")
-            splash:wait(15)
+            assert(splash:go(splash.args.url))
+            splash:runjs("$('#index_nav > .nav-list > :nth-child(4)').click()")
+            splash:wait(2)
             return {
-                html = splash:html(),
-                url = "asduhasiudhasd",
+                html = splash:html()
             }
         end
-    """
+        """
     splash_args = {
         'html': 1,
         'images': 0,
-        'lua_source': script
+        'script': 1,
+        'lua_source': script,
     }
-    def __init__(self):
+
+    def __init__(self, **kwargs):
+        super(home_music_spider, self).__init__(**kwargs)
         print "启动爬虫"
 
     def start_requests(self):
-        print '-----------start_requests----------'
         for url in self.start_urls:
-            yield SplashRequest(url,
-                                self.parse_result,
-                                args=self.splash_args)
+            yield SplashRequest(url, self.parse_result, endpoint='execute',
+                                args={'lua_source': self.script})
 
     def parse_result(self, response):
-        print '-----------videolist----------'
+
         music_ul = response.xpath(
-            "//div[@id='b_music']/div[@class='b-section-body']"
-            "/div[@class='b-l']/div[@class='b-body']/ul[@class='vidbox v-list']"
+            "//div[@id='b_music']//ul[@class='vidbox v-list']//li"
         )
-        counter = 0
-        for sel in music_ul.xpath("//li/@data-txt"):
-            print '----------%s-----------' % counter
-            print sel.extract()
-            counter += 1
+        for sel in music_ul:
+            item = HomeItem()
+            print '---------------------'
+            print sel.xpath("@data-txt")[0].extract()
+            print sel.xpath("@data-up")[0].extract()
+            print sel.xpath("@data-gk")[0].extract()
+            print sel.xpath("@data-tg")[0].extract()
+
+            item['data_txt'] = sel.xpath("@data-txt")[0].extract()
+            item['data_up'] = sel.xpath("@data-up")[0].extract()
+            item['data_gk'] = sel.xpath("@data-gk")[0].extract()
+            item['data_tg'] = sel.xpath("@data-tg")[0].extract()
+            item['data_dm'] = sel.xpath("@data-dm")[0].extract()
+            img = sel.xpath("div/a[@class='preview cover-preview']/img")
+            item['data_title'] = img.xpath("@alt")[0].extract()
+            item['data_img'] = 'http:'+img.xpath("@src")[0].extract()
+

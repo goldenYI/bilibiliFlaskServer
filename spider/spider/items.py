@@ -14,3 +14,11 @@ class SpiderItem(scrapy.Item):
     video_av_field = scrapy.Field()
 
 
+class HomeItem(scrapy.Item):
+    data_txt = scrapy.Field()
+    data_up = scrapy.Field()
+    data_tg = scrapy.Field()
+    data_gk = scrapy.Field()
+    data_dm = scrapy.Field()
+    data_title = scrapy.Field()
+    data_img = scrapy.Field()
