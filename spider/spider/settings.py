@@ -68,6 +68,11 @@ ROBOTSTXT_OBEY = True
 #    'spider.pipelines.SomePipeline': 300,
 #}
 
+ITEM_PIPELINES = {
+    'spider.pipelines.JsonWithEncodingPipeline': 300,
+}
+LOG_LEVEL = 'INFO'
+
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html
 #AUTOTHROTTLE_ENABLED = True

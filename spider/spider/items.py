@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-
+# coding=utf-8
 # Define here the models for your scraped items
 #
 # See documentation in:
@@ -22,3 +21,4 @@ class HomeItem(scrapy.Item):
     data_dm = scrapy.Field()
     data_title = scrapy.Field()
     data_img = scrapy.Field()
+    data_av = scrapy.Field()

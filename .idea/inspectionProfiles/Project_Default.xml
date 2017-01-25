@@ -12,6 +12,7 @@
       <option name="ignoredIdentifiers">
         <list>
           <option value="spider.spider.spiders.home_music_spider.spider" />
+          <option value="spider.spider.spiders.home_dance_spider.spider" />
         </list>
       </option>
     </inspection_tool>

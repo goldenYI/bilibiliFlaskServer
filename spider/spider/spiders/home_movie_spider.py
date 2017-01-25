@@ -4,9 +4,9 @@ import scrapy
 from scrapy_splash import SplashRequest
 from spider.items import HomeItem
 import re
-class home_music_spider(scrapy.Spider):
+class home_movie_spider(scrapy.Spider):
 
-    name = "home_music_spider"
+    name = "home_movie_spider"
     allowed_domains = "http://www.bilibili.com/"
     start_urls = [
         "http://www.bilibili.com"
@@ -14,7 +14,7 @@ class home_music_spider(scrapy.Spider):
     script = """
         function main(splash)
             assert(splash:go(splash.args.url))
-            splash:runjs("$('#index_nav > .nav-list > :nth-child(4)').click()")
+            splash:runjs("$('#index_nav > .nav-list > :nth-child(13)').click()")
             splash:wait(2)
             return {
                 html = splash:html()
@@ -28,9 +28,13 @@ class home_music_spider(scrapy.Spider):
         'lua_source': script,
     }
     items = []  # 定义items空集
-    def __init__(self, **kwargs):
-        super(home_music_spider, self).__init__(**kwargs)
-        print "启动爬虫"
+
+    def __init__(self, filename=None, **kwargs):
+        super(home_movie_spider, self).__init__(**kwargs)
+        if filename is not None:
+            self.filename = filename
+        else:
+            self.filename = self.name
 
     def start_requests(self):
         for url in self.start_urls:
@@ -39,7 +43,7 @@ class home_music_spider(scrapy.Spider):
 
     def parse(self, response):
         music_ul = response.xpath(
-            "//div[@id='b_music']//ul[@class='vidbox v-list']//li"
+            "//div[@id='b_movie']//ul[@class='vidbox v-list']//li"
         )
         for sel in music_ul:
             item = HomeItem()
